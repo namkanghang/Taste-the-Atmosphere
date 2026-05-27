@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Café Journal — A Quiet Guide to Bangkok's Cafés</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500&family=IBM+Plex+Sans+Thai:wght@200;300;400;500&family=Noto+Serif+Thai:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2EEE5;
+  --paper-2:#EAE4D7;
+  --ink:#1C1A17;
+  --ink-2:#48433C;
+  --ink-3:#8A8478;
+  --ink-4:#B8B1A2;
+  --line:rgba(28,26,23,.12);
+  --line-soft:rgba(28,26,23,.06);
+  --accent:#3A352D;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  background:var(--paper);color:var(--ink);
+  font-family:'Inter','IBM Plex Sans Thai',-apple-system,sans-serif;
+  font-weight:300;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.6;
+  letter-spacing:.01em;
+}
+.serif{font-family:'Cormorant Garamond','Noto Serif Thai',serif}
+
+/* ===== TOP BAR ===== */
+.topbar{
+  border-bottom:1px solid var(--line);
+  padding:14px 32px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:11px;text-transform:uppercase;letter-spacing:.2em;
+  color:var(--ink-3);font-weight:400;
+}
+.topbar .left,.topbar .right{display:flex;gap:24px}
+
+/* ===== HERO SLIDESHOW ===== */
+.hero{
+  position:relative;
+  height:88vh;min-height:560px;max-height:880px;
+  overflow:hidden;
+  background:#1C1A17;
+}
+.hero-slides{position:absolute;inset:0}
+.hero-slide{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  opacity:0;transform:scale(1.05);
+  transition:opacity 2s ease,transform 8s ease;
+  filter:saturate(.82) contrast(.96) brightness(.85);
+}
+.hero-slide.active{opacity:1;transform:scale(1)}
+.hero-overlay{
+  position:absolute;inset:0;z-index:2;
+  background:
+    linear-gradient(180deg,rgba(28,26,23,.30) 0%,rgba(28,26,23,.10) 35%,rgba(28,26,23,.10) 65%,rgba(28,26,23,.55) 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:64px 32px;
+  color:#fff;
+}
+.hero-issue{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:13px;letter-spacing:.22em;
+  color:rgba(255,255,255,.88);
+  margin-bottom:28px;
+}
+.hero h1{
+  font-family:'Cormorant Garamond','Noto Serif Thai',serif;
+  font-weight:400;color:#fff;
+  font-size:clamp(54px,10vw,130px);
+  line-height:.95;letter-spacing:-.025em;
+  margin:0 0 24px;
+  text-shadow:0 2px 40px rgba(0,0,0,.25);
+}
+.hero h1 em{font-style:italic;font-weight:300;color:rgba(255,255,255,.92)}
+.hero-dek{
+  font-family:'Cormorant Garamond','Noto Serif Thai',serif;
+  font-style:italic;font-weight:300;
+  font-size:clamp(17px,2vw,22px);
+  color:rgba(255,255,255,.88);
+  max-width:580px;line-height:1.5;
+  margin-bottom:30px;
+}
+.hero-rule{
+  width:48px;height:1px;background:rgba(255,255,255,.6);
+}
+.hero-nav{
+  position:absolute;bottom:36px;left:0;right:0;z-index:3;
+  display:flex;justify-content:center;align-items:center;gap:10px;
+}
+.hero-dot{
+  width:36px;height:1px;background:rgba(255,255,255,.32);
+  border:none;cursor:pointer;padding:0;
+  transition:all .35s ease;
+}
+.hero-dot:hover{background:rgba(255,255,255,.6)}
+.hero-dot.active{background:#fff;height:2px;width:48px}
+.hero-counter{
+  position:absolute;bottom:36px;right:36px;z-index:3;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:rgba(255,255,255,.75);font-size:15px;letter-spacing:.08em;
+}
+.hero-scroll{
+  position:absolute;bottom:36px;left:36px;z-index:3;
+  font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(255,255,255,.7);
+  display:flex;align-items:center;gap:10px;
+}
+.hero-scroll::after{
+  content:"";width:24px;height:1px;background:rgba(255,255,255,.5);
+  animation:scrollPulse 2.4s ease-in-out infinite;
+}
+@keyframes scrollPulse{
+  0%,100%{transform:scaleX(.5);opacity:.4}
+  50%{transform:scaleX(1);opacity:1}
+}
+@media (max-width:720px){
+  .hero{height:78vh}
+  .hero-counter,.hero-scroll{display:none}
+  .hero-nav{bottom:24px}
+}
+
+/* ===== CONTROLS ===== */
+.controls{
+  max-width:1180px;margin:0 auto;padding:48px 32px 0;
+}
+
+/* === Location row === */
+.location-row{
+  padding-bottom:28px;margin-bottom:28px;
+  border-bottom:1px solid var(--line);
+}
+.loc-head{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin-bottom:16px;flex-wrap:wrap;gap:12px;
+}
+.loc-chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.loc-divider{
+  font-size:10px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:500;
+  padding:0 6px 0 14px;
+  align-self:center;position:relative;
+}
+.loc-divider::before{
+  content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:1px;height:14px;background:var(--line);
+}
+.loc-chips > .geo + .loc-divider{padding-left:18px}
+.loc-chips > .geo + .loc-divider::before{left:4px}
+.loc-chip{
+  padding:7px 16px;background:transparent;
+  border:1px solid var(--line);border-radius:0;
+  font-family:'Cormorant Garamond','Noto Serif Thai',serif;
+  font-style:italic;font-size:15px;font-weight:400;color:var(--ink-2);
+  cursor:pointer;transition:all .2s;
+  letter-spacing:.01em;
+}
+.loc-chip:hover{border-color:var(--ink);color:var(--ink)}
+.loc-chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.loc-chip.geo{
+  font-style:normal;letter-spacing:.05em;font-size:12px;
+  text-transform:uppercase;font-family:'Inter',sans-serif;font-weight:400;
+}
+.toggle{
+  display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:15px;color:var(--ink-2);user-select:none;
+}
+.toggle input{width:13px;height:13px;accent-color:var(--ink);cursor:pointer}
+.toggle em{color:var(--ink-3);font-size:13px}
+.loc-status{
+  margin-top:14px;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:14px;color:var(--ink-3);
+}
+.loc-status .clear-loc{
+  background:none;border:none;cursor:pointer;
+  font-family:inherit;font-style:normal;
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-3);margin-left:12px;
+  border-bottom:1px solid var(--line);padding:0 0 2px;
+}
+.loc-status .clear-loc:hover{color:var(--ink);border-bottom-color:var(--ink)}
+
+.search-row{
+  display:flex;align-items:flex-end;gap:32px;flex-wrap:wrap;
+  padding-bottom:24px;border-bottom:1px solid var(--line);
+}
+.search-box{flex:1;min-width:280px;position:relative}
+.search-label{
+  display:block;font-size:10px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:8px;font-weight:400;
+}
+.search-box input{
+  width:100%;padding:8px 0;
+  border:none;border-bottom:1px solid var(--line);
+  background:transparent;
+  font-family:'Cormorant Garamond','Noto Serif Thai',serif;
+  font-size:22px;font-style:italic;font-weight:300;
+  color:var(--ink);
+  transition:border-color .25s;
+}
+.search-box input::placeholder{color:var(--ink-4);font-style:italic}
+.search-box input:focus{outline:none;border-bottom-color:var(--ink)}
+
+.random-btn{
+  padding:0;border:none;background:transparent;
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-size:18px;font-weight:400;
+  color:var(--ink);cursor:pointer;
+  display:inline-flex;align-items:center;gap:10px;
+  border-bottom:1px solid var(--ink);
+  padding-bottom:6px;
+  transition:opacity .2s;
+}
+.random-btn:hover{opacity:.6}
+.random-btn .arrow{font-style:normal;transition:transform .3s}
+.random-btn:hover .arrow{transform:translateX(4px)}
+
+.filters{
+  display:flex;gap:0;flex-wrap:wrap;
+  padding:28px 0 0;
+  justify-content:center;
+}
+.chip{
+  padding:6px 18px;background:transparent;border:none;
+  font-family:inherit;
+  font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  font-weight:400;color:var(--ink-3);
+  cursor:pointer;transition:color .2s;
+  position:relative;
+}
+.chip:not(:last-child)::after{
+  content:"";position:absolute;right:0;top:50%;transform:translateY(-50%);
+  width:1px;height:10px;background:var(--line);
+}
+.chip:hover{color:var(--ink)}
+.chip.active{color:var(--ink);font-weight:500}
+.chip.active::before{
+  content:"·";position:absolute;left:6px;top:50%;transform:translateY(-55%);
+  font-size:14px;
+}
+
+/* ===== INDEX BAR ===== */
+.stats{
+  max-width:1180px;margin:48px auto 0;padding:0 32px;
+  display:flex;justify-content:space-between;align-items:baseline;
+  border-bottom:1px solid var(--line);padding-bottom:16px;
+}
+.stats .label{
+  font-size:10px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--ink-3);
+}
+.stats .count{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:18px;color:var(--ink-2);font-weight:400;
+}
+
+/* ===== GRID ===== */
+.grid{
+  max-width:1180px;margin:0 auto 96px;padding:48px 32px;
+  display:grid;gap:64px 48px;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+}
+.card{
+  cursor:pointer;display:flex;flex-direction:column;
+  transition:opacity .25s;
+}
+.card:hover{opacity:.78}
+.card:hover .card-img-inner{transform:scale(1.03)}
+
+.card-index{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:13px;color:var(--ink-3);
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding-bottom:10px;margin-bottom:14px;
+  border-bottom:1px solid var(--line);
+}
+.card-index .area{
+  text-transform:uppercase;font-style:normal;letter-spacing:.2em;font-size:10px;
+}
+
+.card-img{
+  position:relative;aspect-ratio:3/4;
+  overflow:hidden;background:var(--paper-2);
+  margin-bottom:18px;
+}
+.card-img-inner{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  transition:transform 1.2s cubic-bezier(.2,.8,.2,1);
+  filter:saturate(.85) contrast(.96);
+}
+
+.card-name{
+  font-family:'Cormorant Garamond','Noto Serif Thai',serif;
+  font-size:28px;font-weight:400;line-height:1.15;letter-spacing:-.01em;
+  color:var(--ink);margin-bottom:10px;
+}
+.card-desc{
+  font-family:'Cormorant Garamond','Noto Serif Thai',serif;
+  font-style:italic;font-weight:300;
+  color:var(--ink-2);font-size:16px;line-height:1.5;
+  margin-bottom:14px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+
+.card-meta{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-top:12px;border-top:1px solid var(--line-soft);
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:400;
+}
+.card-meta .rating{color:var(--ink-2);font-weight:500}
+.card-meta .dist{
+  color:var(--ink);font-weight:500;
+}
+.card-meta .dist em{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  text-transform:none;letter-spacing:.02em;font-size:13px;font-weight:400;
+  color:var(--ink-2);margin-left:4px;
+}
+
+/* ===== EMPTY ===== */
+.empty{
+  grid-column:1/-1;text-align:center;padding:96px 24px;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:22px;color:var(--ink-3);
+}
+
+/* ===== MODAL ===== */
+.modal-back{
+  position:fixed;inset:0;background:rgba(28,26,23,.5);
+  display:none;align-items:center;justify-content:center;z-index:50;
+  padding:32px;
+}
+.modal-back.show{display:flex}
+.modal{
+  background:var(--paper);
+  max-width:680px;width:100%;max-height:90vh;overflow:auto;
+  position:relative;animation:rise .4s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.modal-img{
+  height:380px;background-size:cover;background-position:center;
+  filter:saturate(.85) contrast(.96);
+}
+.modal-body{padding:48px 56px 56px;text-align:center}
+.modal-issue{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:var(--ink-3);font-size:13px;letter-spacing:.1em;margin-bottom:14px;
+}
+.modal-name{
+  font-family:'Cormorant Garamond','Noto Serif Thai',serif;
+  font-size:42px;font-weight:400;line-height:1.1;letter-spacing:-.01em;
+  margin-bottom:8px;
+}
+.modal-area{
+  font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:24px;
+}
+.modal-rule{width:36px;height:1px;background:var(--ink-3);margin:0 auto 24px}
+.modal-desc{
+  font-family:'Cormorant Garamond','Noto Serif Thai',serif;
+  font-style:italic;font-weight:300;
+  color:var(--ink-2);font-size:19px;line-height:1.55;margin-bottom:32px;
+  max-width:480px;margin-left:auto;margin-right:auto;
+}
+.modal-menu{
+  text-align:left;max-width:460px;margin:0 auto 36px;
+  padding-top:8px;
+}
+.menu-head{
+  text-align:center;
+  font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:24px;font-weight:400;
+}
+.menu-head::before,.menu-head::after{
+  content:"—";margin:0 10px;color:var(--ink-4);
+}
+.menu-item{margin-bottom:18px}
+.menu-item:last-child{margin-bottom:0}
+.menu-line{
+  display:flex;align-items:baseline;gap:6px;
+}
+.menu-name{
+  font-family:'Cormorant Garamond','Noto Serif Thai',serif;
+  font-size:19px;font-weight:500;color:var(--ink);
+  letter-spacing:-.005em;line-height:1.3;
+}
+.menu-dots{
+  flex:1;
+  border-bottom:1px dotted var(--ink-4);
+  transform:translateY(-4px);
+  min-width:20px;
+}
+.menu-price{
+  font-family:'Cormorant Garamond',serif;
+  font-size:17px;color:var(--ink-2);font-weight:400;
+  white-space:nowrap;
+}
+.menu-desc{
+  font-family:'Cormorant Garamond','Noto Serif Thai',serif;
+  font-style:italic;font-weight:300;
+  color:var(--ink-3);font-size:14px;line-height:1.45;
+  margin-top:4px;
+}
+
+.modal-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:0;border-top:1px solid var(--line);
+  text-align:left;margin-top:8px;
+}
+.modal-cell{
+  padding:18px 20px;border-bottom:1px solid var(--line);
+}
+.modal-cell:nth-child(odd){border-right:1px solid var(--line)}
+.modal-cell .k{
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:6px;
+}
+.modal-cell .v{
+  font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--ink);
+}
+.close-btn{
+  position:absolute;top:20px;right:20px;
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(242,238,229,.95);border:1px solid var(--line);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:var(--ink);z-index:2;
+  font-family:inherit;font-weight:300;
+}
+.close-btn:hover{background:var(--paper)}
+
+/* ===== FOOTER ===== */
+footer{
+  border-top:1px solid var(--line);
+  padding:48px 32px;text-align:center;
+  font-size:11px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--ink-3);
+}
+footer .serif-line{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  text-transform:none;letter-spacing:normal;font-size:16px;
+  color:var(--ink-2);margin-bottom:10px;
+}
+
+@media (max-width:640px){
+  header{padding:48px 24px 36px}
+  .modal-body{padding:32px 24px}
+  .grid{gap:48px 24px;padding:32px 20px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="left">
+    <span>Bangkok · Chiang Mai</span>
+    <span>Volume I</span>
+  </div>
+  <div class="right">
+    <span>Spring / Summer 2026</span>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero-slides" id="heroSlides">
+    <div class="hero-slide active" style="background-image:url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=2000&q=80')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=2000&q=80')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=2000&q=80')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=2000&q=80')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1559925393-8be0ec4767c8?w=2000&q=80')"></div>
+  </div>
+  <div class="hero-overlay">
+    <div class="hero-issue">— No. 01 · The Café Journal · MMXXVI —</div>
+    <h1>Taste the<br><em>Atmosphere</em></h1>
+    <p class="hero-dek">บันทึกร้านกาแฟจากกรุงเทพและเชียงใหม่ คัดสรรสำหรับผู้ที่แสวงหาช่วงเวลาช้า ๆ ระหว่างทาง</p>
+    <div class="hero-rule"></div>
+  </div>
+  <div class="hero-scroll">Scroll · เลื่อนดู</div>
+  <div class="hero-nav" id="heroNav"></div>
+  <div class="hero-counter" id="heroCounter">01 / 05</div>
+</section>
+
+<section class="controls">
+  <div class="location-row">
+    <div class="loc-head">
+      <span class="search-label">From · ตำแหน่งของคุณ</span>
+      <label class="toggle">
+        <input type="checkbox" id="within30" checked>
+        <span>Within 30 minutes <em>(≈ 6 km)</em></span>
+      </label>
+    </div>
+    <div class="loc-chips" id="locChips">
+      <button class="loc-chip geo" id="geoBtn">⊙ Use my location</button>
+    </div>
+    <div class="loc-status" id="locStatus" hidden></div>
+  </div>
+  <div class="search-row">
+    <div class="search-box">
+      <span class="search-label">Search · ค้นหา</span>
+      <input type="text" id="search" placeholder="ชื่อร้าน, ย่าน, บรรยากาศ...">
+    </div>
+    <button class="random-btn" id="randomBtn">
+      Surprise me <span class="arrow">→</span>
+    </button>
+  </div>
+  <div class="filters" id="filters">
+    <button class="chip active" data-filter="all">All</button>
+    <button class="chip" data-filter="work">Work</button>
+    <button class="chip" data-filter="chill">Slow</button>
+    <button class="chip" data-filter="photo">Aesthetic</button>
+    <button class="chip" data-filter="dessert">Sweets</button>
+    <button class="chip" data-filter="pet">Pets</button>
+    <button class="chip" data-filter="247">24 Hours</button>
+  </div>
+</section>
+
+<div class="stats">
+  <span class="label">The Index</span>
+  <span class="count" id="count">—</span>
+</div>
+
+<main class="grid" id="grid"></main>
+
+<div class="modal-back" id="modalBack">
+  <div class="modal" id="modal"></div>
+</div>
+
+<footer>
+  <div class="serif-line"><em>Made slowly, for those who linger.</em></div>
+  The Café Journal · MMXXVI
+</footer>
+
+<script>
+const CAFES = [
+  {name:"Roots Coffee", area:"Thonglor", areaTh:"ทองหล่อ", lat:13.7268, lng:100.5825, desc:"คาเฟ่สเปเชียลตี้ระดับตำนาน เมล็ดคั่วเองสด ๆ บรรยากาศมินิมอล เหมาะกับคอกาแฟตัวจริง", rating:4.8, price:"฿฿", hours:"7:00–18:00", tags:["work","photo"], chips:["Specialty","Wi-Fi","Power"], img:"https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1000", menu:[
+    {name:"Honey Lemon Americano", desc:"กาแฟดำเย็นตัดด้วยน้ำผึ้งดอกไม้ป่าและเลมอน", price:"฿130"},
+    {name:"Signature Espresso", desc:"เบลนด์ของร้าน รสเข้มกลิ่นช็อกโกแลต", price:"฿95"},
+    {name:"Crème Brûlée Latte", desc:"ลาเต้นุ่ม ๆ ราดน้ำตาลเผาหอมไหม้", price:"฿160"}
+  ]},
+  {name:"Factory Coffee", area:"Phaya Thai", areaTh:"พญาไท", lat:13.7569, lng:100.5337, desc:"แชมป์บาริสต้าระดับโลก รสกาแฟจัดเต็ม สเปซโล่งสไตล์โรงงาน", rating:4.7, price:"฿฿฿", hours:"7:00–18:00", tags:["work","photo"], chips:["World Champion","Cupping"], img:"https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=1000", menu:[
+    {name:"Sparkling Espresso", desc:"เอสเพรสโซช็อตชนน้ำโทนิคซ่า ๆ เย็นชื่นใจ", price:"฿150"},
+    {name:"World Champion Latte", desc:"ลาเต้สูตรแชมป์โลก เนื้อนุ่มเหมือนกำมะหยี่", price:"฿140"},
+    {name:"Cold Drip", desc:"ดริปเย็นช้า ๆ 12 ชั่วโมง รสคาราเมลลึก", price:"฿170"}
+  ]},
+  {name:"Hands and Heart", area:"Ekkamai", areaTh:"เอกมัย", lat:13.7245, lng:100.5862, desc:"คาเฟ่อบอุ่นในบ้านไม้เก่า เสิร์ฟกาแฟกับขนมโฮมเมดน่ารัก ๆ", rating:4.6, price:"฿฿", hours:"8:00–17:00", tags:["chill","dessert","photo"], chips:["Homemade","Terrace"], img:"https://images.unsplash.com/photo-1525480122447-64809d765a3d?w=1000", menu:[
+    {name:"Banana Caramel Cake", desc:"เค้กกล้วยอบใหม่ทุกเช้า ราดคาราเมลโฮมเมด", price:"฿140"},
+    {name:"Hand-drip Ethiopia", desc:"เมล็ดเอธิโอเปีย รสดอกไม้และผลไม้สด", price:"฿160"},
+    {name:"Burnt Cheesecake", desc:"ชีสเค้กสไตล์ซานเซบาสเตียน ผิวไหม้หอม", price:"฿150"}
+  ]},
+  {name:"The Commons", area:"Saladaeng", areaTh:"สีลม", lat:13.7236, lng:100.5363, desc:"คอมมูนิตี้สเปซมีหลายร้านในที่เดียว นั่งทำงานชิล ๆ ได้ทั้งวัน", rating:4.5, price:"฿฿", hours:"8:00–22:00", tags:["work","chill","pet"], chips:["Community","Pet friendly"], img:"https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1000", menu:[
+    {name:"Roots Iced Latte", desc:"ลาเต้เย็นจาก Roots สั่งเปลี่ยนนมโอ๊ตได้", price:"฿140"},
+    {name:"Sourdough Pizza", desc:"พิซซ่าแป้งซาวร์โดว์ อบเตาฟืน หอมไหม้", price:"฿320"},
+    {name:"Almond Croissant", desc:"ครัวซองต์อบสองรอบ ไส้อัลมอนด์ครีม", price:"฿120"}
+  ]},
+  {name:"Gallery Drip", area:"Ratchathewi", areaTh:"ราชเทวี", lat:13.7459, lng:100.5302, desc:"ดริปกาแฟท่ามกลางงานศิลป์ใน BACC สงบ ดูงานได้พร้อมจิบกาแฟ", rating:4.6, price:"฿฿", hours:"10:30–19:00", tags:["chill","photo"], chips:["Gallery","Pour over"], img:"https://images.unsplash.com/photo-1559925393-8be0ec4767c8?w=1000", menu:[
+    {name:"Drip of the Day", desc:"เมล็ด single origin หมุนเวียนทุกวัน", price:"฿110"},
+    {name:"Mocha Bianco", desc:"มอคค่าไวท์ช็อกโกแลต รสนุ่มไม่หวานจัด", price:"฿140"},
+    {name:"Affogato", desc:"เอสเพรสโซราดบนไอศกรีมวานิลลาเมล็ด", price:"฿160"}
+  ]},
+  {name:"Brave Roasters", area:"Sathorn", areaTh:"สาทร", lat:13.7185, lng:100.5310, desc:"ร้านคั่วเองที่จริงจังเรื่องเมล็ด เมนูครีเอทีฟเปลี่ยนตามฤดู", rating:4.7, price:"฿฿฿", hours:"8:00–18:00", tags:["work"], chips:["Roastery","Single Origin"], img:"https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=1000", menu:[
+    {name:"Single Origin Pour-Over", desc:"เลือกเมล็ดประจำสัปดาห์ ดริปสด ๆ ต่อหน้า", price:"฿180"},
+    {name:"Espresso Tonic", desc:"เอสเพรสโซผสมโทนิคซิตรัส จบหวานซ่า", price:"฿150"},
+    {name:"Brave House Latte", desc:"ลาเต้ประจำร้าน เบลนด์เข้มกลิ่นถั่ว", price:"฿130"}
+  ]},
+  {name:"Mother Roaster", area:"Yaowarat", areaTh:"เยาวราช", lat:13.7421, lng:100.5126, desc:"คาเฟ่ลับซ่อนในเยาวราช ป๊อปอัพในบ้านเก่า บรรยากาศชวนถ่ายรูป", rating:4.7, price:"฿฿", hours:"10:00–18:00", tags:["photo","chill"], chips:["Hidden","Heritage"], img:"https://images.unsplash.com/photo-1511920170033-f8396924c348?w=1000", menu:[
+    {name:"Yaowarat Kopi", desc:"กาแฟสไตล์เยาวราช ใส่นมข้นหวานเข้ม", price:"฿90"},
+    {name:"Salted Caramel Latte", desc:"ลาเต้คาราเมลโรยเกลือทะเล หวานแบบเค็มนิด ๆ", price:"฿140"},
+    {name:"Pa-tong-ko & Coffee", desc:"ปาท่องโก๋ทอดร้อน เสิร์ฟคู่กาแฟดำ", price:"฿110"}
+  ]},
+  {name:"Mountain Café", area:"Ari", areaTh:"อารีย์", lat:13.7799, lng:100.5447, desc:"คาเฟ่บรรยากาศป่าเขา ต้นไม้เต็มร้าน เครื่องดื่มน่ารัก ขนมอร่อย", rating:4.4, price:"฿฿", hours:"9:00–20:00", tags:["chill","photo","dessert"], chips:["Greenery","Photogenic"], img:"https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1000", menu:[
+    {name:"Matcha Strawberry", desc:"มัทฉะเย็นเลเยอร์สตรอเบอร์รี่ ถ่ายรูปสวย", price:"฿170"},
+    {name:"Mini Honey Toast", desc:"ฮันนี่โทสต์ไซส์เล็ก ราดน้ำผึ้งและไอศกรีม", price:"฿180"},
+    {name:"Iced Mocha Mountain", desc:"มอคค่าเย็นแต่งวิปครีมเป็นยอดเขา", price:"฿150"}
+  ]},
+  {name:"After You", area:"Siam", areaTh:"สยาม", lat:13.7456, lng:100.5345, desc:"ราชาขนมหวาน Shibuya Honey Toast และ Mille Crepe ในตำนาน", rating:4.5, price:"฿฿", hours:"10:30–22:00", tags:["dessert"], chips:["Iconic","Sweets"], img:"https://images.unsplash.com/photo-1488477181946-6428a0291777?w=1000", menu:[
+    {name:"Shibuya Honey Toast", desc:"ขนมปังก้อนใหญ่กับไอศกรีม ตำนานตั้งแต่ปี 2007", price:"฿245"},
+    {name:"Mille Crepe Original", desc:"มิลล์เครปวานิลลา 20+ ชั้น บางเฉียบ", price:"฿165"},
+    {name:"Matcha Lava Cake", desc:"เค้กมัทฉะลาวา ไหลทะลักเมื่อตัด", price:"฿185"}
+  ]},
+  {name:"Too Fast To Sleep", area:"Sam Yan", areaTh:"สามย่าน", lat:13.7330, lng:100.5305, desc:"คาเฟ่ 24 ชั่วโมง สำหรับนักเรียน-คนทำงาน นั่งติดได้ทั้งคืน", rating:4.2, price:"฿", hours:"24 hrs", tags:["work","247"], chips:["24 Hours","Free Wi-Fi"], img:"https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=1000", menu:[
+    {name:"All-Night Drip", desc:"ดริปไม่อั้นหลังสี่ทุ่ม สำหรับนักโต้รุ่ง", price:"฿80"},
+    {name:"Iced Cocoa", desc:"โกโก้เย็นหวานมัน ช่วยปลุกพลัง", price:"฿70"},
+    {name:"Ham & Cheese Toastie", desc:"แซนวิชย่างเนยร้อน ๆ มื้อดึกเบา ๆ", price:"฿95"}
+  ]},
+  {name:"Sarnies Bangkok", area:"Charoenkrung", areaTh:"เจริญกรุง", lat:13.7250, lng:100.5160, desc:"ตึกเก่า 100 ปีรีโนเวทเป็นคาเฟ่เท่ ๆ บรันช์ดีงาม กาแฟเข้ม", rating:4.6, price:"฿฿฿", hours:"7:00–22:00", tags:["work","photo","chill"], chips:["Brunch","Heritage"], img:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=1000", menu:[
+    {name:"Truffle Scrambled Eggs", desc:"ไข่กวนทรัฟเฟิลบนขนมปังซาวร์โดว์", price:"฿320"},
+    {name:"Flat White", desc:"แฟลตไวท์เข้มข้น เปลี่ยนนมโอ๊ตได้ฟรี", price:"฿140"},
+    {name:"Banana Bread French Toast", desc:"เฟรนช์โทสต์ขนมปังกล้วย ราดเมเปิ้ลไซรัป", price:"฿280"}
+  ]},
+  {name:"Pacamara", area:"Asok", areaTh:"อโศก", lat:13.7367, lng:100.5601, desc:"เชนกาแฟไทยคุณภาพดี ราคาเอื้อมถึง มีให้นั่งหลายสาขาทั่วเมือง", rating:4.3, price:"฿฿", hours:"7:00–21:00", tags:["work","pet"], chips:["Chain","Accessible"], img:"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1000", menu:[
+    {name:"Cold Brew Original", desc:"โคลด์บรูว์รสนุ่ม กรดต่ำ ดื่มง่าย", price:"฿120"},
+    {name:"Almond Latte", desc:"ลาเต้นมอัลมอนด์ หอมถั่วอ่อน ๆ", price:"฿130"},
+    {name:"Basque Cheesecake", desc:"ชีสเค้กผิวไหม้สไตล์บาสก์ คลาสสิก", price:"฿140"}
+  ]},
+
+  // ===== Chiang Mai =====
+  {name:"Ristr8to Coffee", area:"Nimman", areaTh:"นิมมาน", lat:18.7992, lng:98.9685, desc:"คาเฟ่ตำนานของนิมมาน Latte Art Champion ระดับโลก เครื่องดื่มสร้างสรรค์ตลอดเวลา", rating:4.7, price:"฿฿", hours:"7:00–19:00", tags:["work","photo"], chips:["Latte Art","World Champion"], img:"https://images.unsplash.com/photo-1559925393-8be0ec4767c8?w=1000", menu:[
+    {name:"Houston Bridge", desc:"ซิกเนเจอร์เครื่องดื่มลายลาเต้อาร์ตอันลือชื่อ", price:"฿180"},
+    {name:"Espresso Tonic", desc:"เอสเพรสโซโทนิคซ่า ๆ เย็นชื่นใจ", price:"฿140"},
+    {name:"Black Magic", desc:"กาแฟดำสูตรพิเศษ รสเข้มหวานนิด ๆ", price:"฿150"}
+  ]},
+  {name:"Graph Cafe", area:"Old City", areaTh:"เมืองเก่าเชียงใหม่", lat:18.7886, lng:98.9890, desc:"คาเฟ่ลับในตรอกเล็ก บรรยากาศมืดมินิมอล เครื่องดื่มดูดีเหมือนงานศิลป์", rating:4.6, price:"฿฿", hours:"10:00–18:00", tags:["chill","photo"], chips:["Hidden","Dark Minimal"], img:"https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=1000", menu:[
+    {name:"Graph Original", desc:"เครื่องดื่มซิกเนเจอร์สูตรลับ ดื่มแล้วเล่าให้เพื่อนฟัง", price:"฿160"},
+    {name:"Yuzu Honey Espresso", desc:"เอสเพรสโซยูซุน้ำผึ้ง เปรี้ยวหวานสดชื่น", price:"฿150"},
+    {name:"Brown Sugar Latte", desc:"ลาเต้น้ำตาลทรายแดง หอมไหม้นุ่ม", price:"฿130"}
+  ]},
+  {name:"Akha Ama Coffee", area:"Nimman", areaTh:"นิมมาน", lat:18.7950, lng:98.9856, desc:"กาแฟจากชาวอาข่าบนดอย Single origin ของจริง อบอุ่นด้วยเรื่องราวชุมชน", rating:4.6, price:"฿฿", hours:"8:00–18:00", tags:["work","chill"], chips:["Hill Tribe","Single Origin"], img:"https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=1000", menu:[
+    {name:"Akha Drip", desc:"ดริปกาแฟอาข่าแม่จันใต้ รสซับซ้อนแบบบนดอย", price:"฿120"},
+    {name:"Honey Process Latte", desc:"ลาเต้จากเมล็ดกระบวนการน้ำผึ้ง หวานละมุน", price:"฿140"},
+    {name:"Khao Soi Set", desc:"เซตข้าวซอยพร้อมกาแฟ มื้อเที่ยงเหนือต้นตำรับ", price:"฿180"}
+  ]},
+  {name:"No.39 Café", area:"Hang Dong", areaTh:"หางดง", lat:18.8074, lng:99.0188, desc:"คาเฟ่สวนสวยริมบ่อน้ำ มุมถ่ายรูปทุกซอกมุม นั่งชิลกับธรรมชาติ", rating:4.4, price:"฿฿", hours:"9:00–19:00", tags:["chill","photo","pet"], chips:["Garden","Pond"], img:"https://images.unsplash.com/photo-1525480122447-64809d765a3d?w=1000", menu:[
+    {name:"Strawberry Cheesecake", desc:"ชีสเค้กสตรอเบอร์รี่ราดซอสสด หวานเปรี้ยว", price:"฿160"},
+    {name:"Garden Iced Tea", desc:"ชาเย็นใส่ดอกไม้เก็บจากสวนของร้าน", price:"฿120"},
+    {name:"Mango Sticky Rice Cake", desc:"เค้กข้าวเหนียวมะม่วงสไตล์โมเดิร์น", price:"฿180"}
+  ]},
+  {name:"Khagee Cafe", area:"Wat Ket", areaTh:"วัดเกต", lat:18.7910, lng:99.0040, desc:"เบเกอรี่สไตล์ญี่ปุ่นในบ้านไม้เก่าริมน้ำ ขนมปังซาวร์โดว์อบใหม่ทุกวัน", rating:4.6, price:"฿฿", hours:"10:00–16:00", tags:["dessert","chill"], chips:["Japanese","Bakery"], img:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=1000", menu:[
+    {name:"Hokkaido Milk Toast", desc:"ขนมปังนมฮอกไกโดอบใหม่ นุ่มหอมเนย", price:"฿140"},
+    {name:"Sourdough Sandwich", desc:"แซนวิชซาวร์โดว์ไส้อะโวคาโด-แฮม", price:"฿180"},
+    {name:"Hojicha Latte", desc:"โฮจิฉะลาเต้ ใบชาคั่วหอม จิบเย็นชา", price:"฿130"}
+  ]},
+  {name:"The Baristro at Ping River", area:"Riverside", areaTh:"ริมปิง", lat:18.7793, lng:99.0067, desc:"คาเฟ่ริมน้ำปิง บรรยากาศโรแมนติก จิบกาแฟดูแม่น้ำไหลผ่าน", rating:4.4, price:"฿฿", hours:"8:00–22:00", tags:["chill","photo","work"], chips:["Riverside","View"], img:"https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1000", menu:[
+    {name:"Ping River Latte", desc:"ลาเต้สูตรประจำร้าน ดื่มคู่วิวแม่น้ำ", price:"฿140"},
+    {name:"Iced Berry Yogurt", desc:"โยเกิร์ตเบอร์รี่เย็น สดชื่นยามบ่าย", price:"฿160"},
+    {name:"Croissant Brunch Set", desc:"เซตครัวซองต์พร้อมกาแฟและสลัด", price:"฿280"}
+  ]}
+];
+
+const LOCATIONS = [
+  {city:'Bangkok',    key:'siam',         label:'Siam · สยาม',           lat:13.7456, lng:100.5345},
+  {city:'Bangkok',    key:'sukhumvit',    label:'Sukhumvit · สุขุมวิท',    lat:13.7367, lng:100.5601},
+  {city:'Bangkok',    key:'ari',          label:'Ari · อารีย์',            lat:13.7795, lng:100.5454},
+  {city:'Bangkok',    key:'sathorn',      label:'Sathorn · สาทร',         lat:13.7224, lng:100.5292},
+  {city:'Bangkok',    key:'samyan',       label:'Sam Yan · สามย่าน',      lat:13.7325, lng:100.5294},
+  {city:'Bangkok',    key:'charoenkrung', label:'Charoenkrung · เจริญกรุง',  lat:13.7240, lng:100.5163},
+  {city:'Chiang Mai', key:'nimman',       label:'Nimman · นิมมาน',        lat:18.7995, lng:98.9670},
+  {city:'Chiang Mai', key:'oldcity',      label:'Old City · เมืองเก่า',     lat:18.7886, lng:98.9876},
+  {city:'Chiang Mai', key:'riverside',    label:'Riverside · ริมปิง',       lat:18.7900, lng:99.0035},
+];
+
+const grid = document.getElementById('grid');
+const search = document.getElementById('search');
+const filters = document.getElementById('filters');
+const count = document.getElementById('count');
+const modalBack = document.getElementById('modalBack');
+const modal = document.getElementById('modal');
+const locChips = document.getElementById('locChips');
+const locStatus = document.getElementById('locStatus');
+const geoBtn = document.getElementById('geoBtn');
+const within30El = document.getElementById('within30');
+
+let activeFilter = 'all';
+let activeSearch = '';
+let userLoc = null;
+let within30 = true;
+
+const pad = n => String(n).padStart(2,'0');
+
+// ===== HERO SLIDESHOW =====
+(function initHero(){
+  const slides = document.querySelectorAll('.hero-slide');
+  const nav = document.getElementById('heroNav');
+  const counter = document.getElementById('heroCounter');
+  let cur = 0, timer;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'hero-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `Slide ${i+1}`);
+    dot.addEventListener('click', () => { go(i); restart(); });
+    nav.appendChild(dot);
+  });
+  const dots = nav.querySelectorAll('.hero-dot');
+
+  function go(i){
+    slides[cur].classList.remove('active');
+    dots[cur].classList.remove('active');
+    cur = (i + slides.length) % slides.length;
+    slides[cur].classList.add('active');
+    dots[cur].classList.add('active');
+    counter.textContent = `${pad(cur+1)} / ${pad(slides.length)}`;
+  }
+  function next(){ go(cur + 1); }
+  function restart(){ clearInterval(timer); timer = setInterval(next, 6000); }
+  counter.textContent = `01 / ${pad(slides.length)}`;
+  restart();
+})();
+
+// Haversine — straight-line km between two coords
+function distKm(a, b){
+  const R = 6371;
+  const dLat = (b.lat - a.lat) * Math.PI/180;
+  const dLng = (b.lng - a.lng) * Math.PI/180;
+  const lat1 = a.lat * Math.PI/180;
+  const lat2 = b.lat * Math.PI/180;
+  const x = Math.sin(dLat/2)**2 + Math.sin(dLng/2)**2 * Math.cos(lat1)*Math.cos(lat2);
+  return 2 * R * Math.asin(Math.sqrt(x));
+}
+// Rough Bangkok travel time: 30 min ≈ 6 km (mix of BTS, walk, traffic)
+function estMinutes(km){ return Math.max(1, Math.round(km / 6 * 30)); }
+
+// Build location chips, grouped by city
+let lastCity = null;
+LOCATIONS.forEach(loc => {
+  if (loc.city !== lastCity){
+    const div = document.createElement('span');
+    div.className = 'loc-divider';
+    div.textContent = loc.city;
+    locChips.appendChild(div);
+    lastCity = loc.city;
+  }
+  const btn = document.createElement('button');
+  btn.className = 'loc-chip';
+  btn.dataset.key = loc.key;
+  btn.textContent = loc.label;
+  btn.addEventListener('click', () => setLocation(loc));
+  locChips.appendChild(btn);
+});
+
+function setLocation(loc){
+  userLoc = loc;
+  document.querySelectorAll('.loc-chip').forEach(c => c.classList.remove('active'));
+  if (loc.key) {
+    locChips.querySelector(`[data-key="${loc.key}"]`)?.classList.add('active');
+  } else {
+    geoBtn.classList.add('active');
+  }
+  locStatus.hidden = false;
+  locStatus.innerHTML = `From <em>${loc.label}</em> <button class="clear-loc" id="clearLoc">Clear</button>`;
+  document.getElementById('clearLoc').onclick = clearLocation;
+  render();
+}
+
+function clearLocation(){
+  userLoc = null;
+  document.querySelectorAll('.loc-chip').forEach(c => c.classList.remove('active'));
+  geoBtn.textContent = '⊙ Use my location';
+  locStatus.hidden = true;
+  locStatus.innerHTML = '';
+  render();
+}
+
+geoBtn.addEventListener('click', () => {
+  if (!navigator.geolocation) {
+    alert('เบราว์เซอร์ไม่รองรับการระบุตำแหน่ง');
+    return;
+  }
+  const original = geoBtn.textContent;
+  geoBtn.textContent = '⊙ Locating…';
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      geoBtn.textContent = '⊙ Your location';
+      setLocation({key:null, label:'Your location · ตำแหน่งของคุณ', lat:pos.coords.latitude, lng:pos.coords.longitude});
+    },
+    err => {
+      geoBtn.textContent = original;
+      alert('ไม่สามารถดึงตำแหน่งได้: ' + err.message);
+    },
+    {timeout:10000, maximumAge:60000}
+  );
+});
+
+within30El.addEventListener('change', e => { within30 = e.target.checked; render(); });
+
+function render(){
+  const q = activeSearch.toLowerCase().trim();
+  let list = CAFES.filter(c => {
+    if (activeFilter !== 'all' && !c.tags.includes(activeFilter)) return false;
+    if (q && !(c.name+' '+c.area+' '+c.areaTh+' '+c.desc+' '+c.chips.join(' ')).toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  if (userLoc) {
+    list = list.map(c => ({...c, _dist: distKm(c, userLoc), _orig: c}));
+    if (within30) list = list.filter(c => c._dist <= 6);
+    list.sort((a,b) => a._dist - b._dist);
+  } else {
+    list = list.map(c => ({...c, _orig: c}));
+    list.sort((a,b) => b.rating - a.rating);
+  }
+
+  count.textContent = userLoc
+    ? `${list.length} within reach · ${list.length} ร้านในรัศมี`
+    : `${list.length} entries · ${list.length} ร้าน`;
+
+  if (!list.length){
+    grid.innerHTML = `<div class="empty">— ${userLoc ? 'ไม่มีร้านภายใน 30 นาที — ลองปิดตัวกรองหรือเปลี่ยนตำแหน่ง' : 'ไม่มีบันทึกที่ตรงตามคำค้น'} —</div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map((c,i) => `
+    <article class="card" data-idx="${CAFES.indexOf(c._orig)}">
+      <div class="card-index">
+        <span>No. ${pad(i+1)}</span>
+        <span class="area">${c.area}</span>
+      </div>
+      <div class="card-img">
+        <div class="card-img-inner" style="background-image:url('${c.img}')"></div>
+      </div>
+      <h3 class="card-name">${c.name}</h3>
+      <p class="card-desc">${c.desc}</p>
+      <div class="card-meta">
+        <span class="rating">★ ${c.rating}</span>
+        ${c._dist !== undefined
+          ? `<span class="dist">${c._dist.toFixed(1)} km <em>· ~${estMinutes(c._dist)} min</em></span>`
+          : `<span>${c.hours}</span>`}
+      </div>
+    </article>
+  `).join('');
+
+  grid.querySelectorAll('.card').forEach(el => {
+    el.addEventListener('click', () => openModal(CAFES[+el.dataset.idx]));
+  });
+}
+
+function openModal(c){
+  const idx = CAFES.indexOf(c);
+  modal.innerHTML = `
+    <button class="close-btn" id="closeBtn">×</button>
+    <div class="modal-img" style="background-image:url('${c.img}')"></div>
+    <div class="modal-body">
+      <div class="modal-issue">— No. ${pad(idx+1)} —</div>
+      <h2 class="modal-name">${c.name}</h2>
+      <div class="modal-area">${c.area} · ${c.areaTh}</div>
+      <div class="modal-rule"></div>
+      <p class="modal-desc">${c.desc}</p>
+      <div class="modal-menu">
+        <div class="menu-head">Recommended · เมนูแนะนำ</div>
+        ${c.menu.map(m => `
+          <div class="menu-item">
+            <div class="menu-line">
+              <span class="menu-name">${m.name}</span>
+              <span class="menu-dots"></span>
+              <span class="menu-price">${m.price}</span>
+            </div>
+            <div class="menu-desc">${m.desc}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="modal-grid">
+        <div class="modal-cell"><div class="k">Rating</div><div class="v">★ ${c.rating} / 5</div></div>
+        <div class="modal-cell"><div class="k">Price</div><div class="v">${c.price}</div></div>
+        <div class="modal-cell"><div class="k">Hours</div><div class="v">${c.hours}</div></div>
+        ${userLoc
+          ? `<div class="modal-cell"><div class="k">From ${userLoc.label.split(' · ')[0]}</div><div class="v">${distKm(c,userLoc).toFixed(1)} km · ~${estMinutes(distKm(c,userLoc))} min</div></div>`
+          : ''}
+        <div class="modal-cell"><div class="k">Known for</div><div class="v">${c.chips.join(' · ')}</div></div>
+      </div>
+    </div>
+  `;
+  modalBack.classList.add('show');
+  document.getElementById('closeBtn').onclick = closeModal;
+}
+function closeModal(){modalBack.classList.remove('show')}
+modalBack.addEventListener('click',e=>{if(e.target===modalBack) closeModal()});
+
+filters.addEventListener('click',e=>{
+  const btn = e.target.closest('.chip');
+  if(!btn) return;
+  filters.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  activeFilter = btn.dataset.filter;
+  render();
+});
+
+search.addEventListener('input',e=>{activeSearch=e.target.value;render()});
+
+document.getElementById('randomBtn').addEventListener('click',()=>{
+  const pick = CAFES[Math.floor(Math.random()*CAFES.length)];
+  openModal(pick);
+});
+
+render();
+</script>
+</body>
+</html>

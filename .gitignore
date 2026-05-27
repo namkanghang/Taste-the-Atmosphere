@@ -1,0 +1,7 @@
+.claude/
+app.html
+NEW_PROJECT_JUNE/
+.DS_Store
+node_modules/
+.env
+.env.local
