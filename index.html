@@ -168,13 +168,22 @@ html,body{
   font-style:normal;letter-spacing:.05em;font-size:12px;
   text-transform:uppercase;font-family:'Inter',sans-serif;font-weight:400;
 }
-.toggle{
-  display:inline-flex;align-items:center;gap:8px;cursor:pointer;
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:15px;color:var(--ink-2);user-select:none;
+.time-chips{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.time-label{
+  font-family:'Cormorant Garamond','Noto Serif Thai',serif;
+  font-style:italic;font-size:14px;color:var(--ink-3);
+  margin-right:6px;
 }
-.toggle input{width:13px;height:13px;accent-color:var(--ink);cursor:pointer}
-.toggle em{color:var(--ink-3);font-size:13px}
+.time-chip{
+  padding:5px 12px;background:transparent;
+  border:1px solid var(--line);border-radius:0;
+  font-family:'Inter',sans-serif;
+  font-size:11px;letter-spacing:.12em;font-weight:400;color:var(--ink-2);
+  cursor:pointer;transition:all .2s;text-transform:uppercase;
+  white-space:nowrap;
+}
+.time-chip:hover{border-color:var(--ink);color:var(--ink)}
+.time-chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .loc-status{
   margin-top:14px;
   font-family:'Cormorant Garamond',serif;font-style:italic;
@@ -494,10 +503,12 @@ footer .serif-line{
   <div class="location-row">
     <div class="loc-head">
       <span class="search-label">From · ตำแหน่งของคุณ</span>
-      <label class="toggle">
-        <input type="checkbox" id="within30" checked>
-        <span>Within 30 minutes <em>(≈ 6 km)</em></span>
-      </label>
+      <div class="time-chips" id="timeChips">
+        <span class="time-label">Within · ภายใน</span>
+        <button class="time-chip" data-time="10">10 min</button>
+        <button class="time-chip active" data-time="30">30 min</button>
+        <button class="time-chip" data-time="all">All</button>
+      </div>
     </div>
     <div class="loc-chips" id="locChips">
       <button class="loc-chip geo" id="geoBtn">⊙ Use my location</button>
@@ -657,12 +668,12 @@ const modal = document.getElementById('modal');
 const locChips = document.getElementById('locChips');
 const locStatus = document.getElementById('locStatus');
 const geoBtn = document.getElementById('geoBtn');
-const within30El = document.getElementById('within30');
+const timeChips = document.getElementById('timeChips');
 
 let activeFilter = 'all';
 let activeSearch = '';
 let userLoc = null;
-let within30 = true;
+let timeLimit = 30; // minutes; null = no limit
 
 const pad = n => String(n).padStart(2,'0');
 
@@ -770,7 +781,15 @@ geoBtn.addEventListener('click', () => {
   );
 });
 
-within30El.addEventListener('change', e => { within30 = e.target.checked; render(); });
+timeChips.addEventListener('click', e => {
+  const btn = e.target.closest('.time-chip');
+  if (!btn) return;
+  timeChips.querySelectorAll('.time-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  const t = btn.dataset.time;
+  timeLimit = t === 'all' ? null : parseInt(t, 10);
+  render();
+});
 
 function render(){
   const q = activeSearch.toLowerCase().trim();
@@ -782,7 +801,10 @@ function render(){
 
   if (userLoc) {
     list = list.map(c => ({...c, _dist: distKm(c, userLoc), _orig: c}));
-    if (within30) list = list.filter(c => c._dist <= 6);
+    if (timeLimit !== null){
+      const kmLimit = timeLimit / 30 * 6; // 10 min ≈ 2 km, 30 min ≈ 6 km
+      list = list.filter(c => c._dist <= kmLimit);
+    }
     list.sort((a,b) => a._dist - b._dist);
   } else {
     list = list.map(c => ({...c, _orig: c}));
@@ -790,11 +812,13 @@ function render(){
   }
 
   count.textContent = userLoc
-    ? `${list.length} within reach · ${list.length} ร้านในรัศมี`
+    ? (timeLimit !== null
+        ? `${list.length} within ${timeLimit} min · ${list.length} ร้านในรัศมี`
+        : `${list.length} entries · sorted by distance`)
     : `${list.length} entries · ${list.length} ร้าน`;
 
   if (!list.length){
-    grid.innerHTML = `<div class="empty">— ${userLoc ? 'ไม่มีร้านภายใน 30 นาที — ลองปิดตัวกรองหรือเปลี่ยนตำแหน่ง' : 'ไม่มีบันทึกที่ตรงตามคำค้น'} —</div>`;
+    grid.innerHTML = `<div class="empty">— ${userLoc ? `ไม่มีร้านภายใน ${timeLimit} นาที — ลองเพิ่มเวลาหรือเปลี่ยนตำแหน่ง` : 'ไม่มีบันทึกที่ตรงตามคำค้น'} —</div>`;
     return;
   }
 
